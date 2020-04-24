@@ -1,0 +1,5 @@
+---
+- hosts: rs-a
+  gather_facts: yes
+  roles:
+    - zabbix

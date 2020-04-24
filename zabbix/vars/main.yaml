@@ -1,0 +1,31 @@
+# zabbix server config
+mysql_server_host: 127.0.0.1
+zabbix_db_user: zabbix
+zabbix_db_pass: zabbix@123
+db_socket_path: /var/lib/mysql/mysql.sock
+db_port: 3306
+listen_port: 10051
+log_file: /var/log/zabbix/zabbix_server.log
+pid_file: /var/run/zabbix/zabbix_server.pid
+socket_dir: /var/run/zabbix
+db_name: zabbix
+start_pingers: 1
+
+# mysql config
+mysql_host: 127.0.0.1
+mysql_port: 3306
+mysql_user: zabbix
+mysql_super: root
+mysql_pass: ''
+mysql_super_pass: ''
+mysql_socket: '/var/lib/mysql/mysql.sock'
+
+mysql_zbx_db: zabbix
+mysql_zbx_user: zabbix
+mysql_zbx_pass: zabbix@123
+
+# zabbix
+zbx_version: 4.4.4
+
+# pip mirror
+pip_mirror: https://pypi.douban.com/simple
