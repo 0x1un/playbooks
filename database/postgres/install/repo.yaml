@@ -1,8 +1,0 @@
----
-- name: Add postgres repo file
-  yum_repository:
-      name: PostgreSQL96
-      baseurl: https://mirrors.tuna.tsinghua.edu.cn/postgresql/repos/yum/9.6/redhat/rhel-7.7-x86_64/
-      gpgkey: https://mirrors.tuna.tsinghua.edu.cn/postgresql/repos/yum/RPM-GPG-KEY-PGDG-96
-      gpgcheck: yes
-      description: postgres 9.6

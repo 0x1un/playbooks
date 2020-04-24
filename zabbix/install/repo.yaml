@@ -1,8 +1,0 @@
----
-- name: Add zabbix China mirrors
-  yum_repository:
-      name: Zabbix Official Repository - $basearch
-      description: Zabbix version
-      baseurl: https://mirrors.aliyun.com/zabbix/zabbix/4.4/rhel/7/$basearch/
-      gpgkey: https://mirrors.aliyun.com/zabbix/RPM-GPG-KEY-ZABBIX
-      gpgcheck: yes
