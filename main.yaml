@@ -1,5 +1,5 @@
 ---
-- hosts: rs-a
+- hosts: rs-b
   gather_facts: yes
   roles:
     - zabbix

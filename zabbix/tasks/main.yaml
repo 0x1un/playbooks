@@ -15,16 +15,10 @@
       gpgkey: https://mirrors.aliyun.com/mariadb/yum/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
 
-- name: Copy get-pip.py to host
-  copy:
-    src: files/get-pip.py
-    dest: /tmp/get-pip.py
-
-- name: Run pip script to install pip
-  command: /usr/bin/python /tmp/get-pip.py
-
-- name: Install PyMySQL module
-  command: 'pip install -i {{ pip_mirror }} pymysql'
+- name: Add CentOS mirror
+  get_url:
+    url: http://mirrors.aliyun.com/repo/Centos-7.repo
+    dest: /etc/yum.repos.d/CentOS-7.repo
 
 - name: Install MariaDB-10.4
   yum:
@@ -32,6 +26,16 @@
     pkg:
       - MariaDB-client
       - MariaDB-server
+
+- name: Install pip from epel
+  yum:
+    pkg:
+      python-pip
+
+
+- name: Install PyMySQL module
+  command: 'pip install -i {{ pip_mirror }} pymysql'
+
 
 - name: Install zabbix-{{zbx_version}}
   yum:
