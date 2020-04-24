@@ -1,0 +1,36 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - include: install/repo.yaml
+    - name: remove_old_versions_of_docker
+      yum:
+        pkg:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: removed
+
+    - name: Install docker-ce
+      yum:
+        pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: installed
+
+    - name: docker mirrors
+      copy:
+        src: conf/docker-daemon.json
+        dest: /etc/docker/daemon.json
+
+    - name: set docker mirrors
+      service:
+        name: docker
+        state: restarted
+        enabled: yes

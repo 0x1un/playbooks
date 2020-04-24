@@ -1,0 +1,10 @@
+---
+- name: Add docker repository
+  vars:
+      repodir: /etc/yum.repos.d
+      reponame: docker-ce.repo
+  get_url:
+      url: https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+      dest: "{{repodir}}/{{reponame}}"
+  # when: ansible_distribution in ['Fedora', 'RedHat', 'CentOS']
+

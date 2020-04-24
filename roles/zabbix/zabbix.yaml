@@ -1,0 +1,95 @@
+---
+- hosts: rs-a
+  gather_facts: no
+  vars:
+      - version: 4.4.4
+      - mysql_server_host: "127.0.0.1"
+      - mysql_port: "3306"
+      - mysql_user: root
+      - mysql_root_password: ""
+      - mysql_socket_path: "/var/lib/mysql/mysql.sock"
+      - zabbix_default_pass: zabbix@123
+      - pip_china_mirror: https://pypi.douban.com/simple
+  tasks:
+    - include: install/repo.yaml
+    - include: ../database/mariadb/install/repo.yaml
+
+    - name: Copy get-pip.py to host
+      copy:
+        src: files/get-pip.py
+        dest: /tmp/get-pip.py
+
+    - name: Run pip script to install pip
+      command: /usr/bin/python /tmp/get-pip.py
+
+    - name: Install PyMySQL module
+      command: 'pip install -i {{ pip_china_mirror }} PyMySQL'
+
+    - name: Install MariaDB-10.4
+      yum:
+        update_cache: yes
+        pkg:
+          - MariaDB-client
+          - MariaDB-server
+
+    - name: Install zabbix-{{version}}
+      yum:
+        pkg:
+          - zabbix-server-mysql-{{version}}
+          - zabbix-web-mysql-{{version}}
+
+    - name: Start mariadb services and enabled then
+      service:
+        name: mariadb
+        state: restarted
+        enabled: yes
+
+    - name: Create zabbix database
+      mysql_db:
+          name: zabbix
+          login_user: '{{ mysql_user }}'
+          login_port: '{{ mysql_port }}'
+          login_password: '{{ mysql_root_password }}'
+          login_host: '{{ mysql_server_host }}'
+          login_unix_socket: '{{mysql_socket_path}}'
+          encoding: 'utf8'
+          state: present
+
+    - name: Create zabbix user
+      mysql_user:
+        login_user: '{{ mysql_user }}'
+        login_password: '{{ mysql_root_password }}'
+        login_host: '{{ mysql_server_host }}'
+        login_port: '{{ mysql_port }}'
+        name: 'zabbix'
+        host: localhost
+        priv: '*.*:ALL'
+        password: '{{ zabbix_default_pass }}'
+        login_unix_socket: '{{ mysql_socket_path }}'
+        state: present
+
+    - name: Import zabbix schema
+      mysql_db:
+          name: zabbix
+          login_host: '{{ mysql_server_host }}'
+          login_user: '{{ mysql_user }}'
+          login_port: '{{ mysql_port }}'
+          login_password: '{{ mysql_root_password }}'
+          login_unix_socket: '{{ mysql_socket_path }}'
+          target: "/usr/share/doc/zabbix-server-mysql-{{ version }}/create.sql.gz"
+          state: "import"
+
+    - name: Init zabbix-server config
+      replace:
+
+    - name: Init zabbix web
+      replace:
+        path: '/etc/httpd/conf.d/zabbix.conf'
+        regexp: '# php_value date.timezone Europe\/Riga'
+        replace: 'php_value date.timezone Asia/Shanghai'
+
+    - name: Start zabbix server and enable then
+      service:
+        name: zabbix-server
+        state: restarted
+        enabled: yes
