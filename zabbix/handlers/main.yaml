@@ -1,13 +1,13 @@
 ---
-
-- name: restart zabbix-server
-  service:
+- name: enable zabbix-server
+  systemd:
     name: zabbix-server
-    state: restarted
+    state: started
     enabled: yes
 
-- name: restart httpd
-  service:
-    name: httpd
-    state: restarted
+- name: enable nginx
+  systemd:
+    name: nginx
+    state: started
     enabled: yes
+

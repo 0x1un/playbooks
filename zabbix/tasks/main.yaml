@@ -1,5 +1,5 @@
 ---
-- name: Add zabbix China mirrors
+- name: Add China mirrors of Zabbix
   yum_repository:
       name: Zabbix
       description: Zabbix version
@@ -7,7 +7,7 @@
       gpgkey: https://mirrors.aliyun.com/zabbix/RPM-GPG-KEY-ZABBIX
       gpgcheck: no
 
-- name: Add mariadb-10.4 repo file
+- name: Add China mirrors of MariaDB10.4
   yum_repository:
       name: mariadb104
       description: 10.4 version of mariadb
@@ -15,47 +15,43 @@
       gpgkey: https://mirrors.aliyun.com/mariadb/yum/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
 
-- name: Add CentOS mirror
+- name: Add China mirrors of Centos7 base
   get_url:
     url: http://mirrors.aliyun.com/repo/Centos-7.repo
     dest: /etc/yum.repos.d/CentOS-7.repo
 
-- name: Install MariaDB-10.4
+- name: Add China mirrors of epel-release
+  get_url:
+    url: http://mirrors.aliyun.com/repo/epel-7.repo
+    dest: /etc/yum.repos.d/epel.repo
+
+- name: Start install zabbix
   yum:
     update_cache: yes
     pkg:
       - MariaDB-client
       - MariaDB-server
-
-- name: Install pip from epel
-  yum:
-    pkg:
-      python-pip
-
-
-- name: Install PyMySQL module
-  command: 'pip install -i {{ pip_mirror }} pymysql'
-
-
-- name: Install zabbix-{{zbx_version}}
-  yum:
-    pkg:
+      - MySQL-python
+      - nginx
+      - zabbix-nginx-conf
       - zabbix-server-mysql-{{zbx_version}}
       - zabbix-web-mysql-{{zbx_version}}
+      - zabbix-web-{{ zbx_version }}
+    state: installed
 
-- name: Start mariadb services and enabled then
-  service:
+- name: Enable MariaDB
+  systemd:
     name: mariadb
-    state: restarted
+    state: started
     enabled: yes
 
 - name: Create zabbix database
   mysql_db:
       name: zabbix
-      login_user: '{{ mysql_super }}'
       login_port: '{{ mysql_port }}'
-      login_password: '{{ mysql_super_pass }}'
       login_host: '{{ mysql_host }}'
+      login_user: '{{ mysql_super }}'
+      login_password: '{{ mysql_super_pass }}'
       login_unix_socket: '{{ mysql_socket }}'
       encoding: 'utf8'
       state: present
@@ -74,6 +70,11 @@
     state: present
   no_log: True
 
+- name: Copy create.sql to remote host
+  copy:
+    src: create.sql
+    dest: /tmp/create.sql
+
 - name: Import zabbix schema
   mysql_db:
       name: zabbix
@@ -82,7 +83,7 @@
       login_port: '{{ mysql_port }}'
       login_password: '{{ mysql_super_pass }}'
       login_unix_socket: '{{ mysql_socket }}'
-      target: "/usr/share/doc/zabbix-server-mysql-{{ zbx_version }}/create.sql.gz"
+      target: '/tmp/create.sql'
       state: "import"
 
 - name: Init zabbix server config
@@ -90,13 +91,5 @@
     src: zabbix_server.conf.j2
     dest: /etc/zabbix/zabbix_server.conf
   notify:
-    - restart zabbix-server
-
-- name: Init zabbix web config
-  replace:
-    path: '/etc/httpd/conf.d/zabbix.conf'
-    regexp: '# php_value date.timezone Europe\/Riga'
-    replace: 'php_value date.timezone Asia/Shanghai'
-  notify:
-    - restart httpd
-
+    - enable zabbix-server
+    - enable nginx

@@ -88,7 +88,7 @@ SocketDir={{ socket_dir }}
 #
 # Mandatory: no
 # Default:
-DBHost={{ mysql_server_host }}
+DBHost={{ mysql_host }}
 
 ### Option: DBName
 #	Database name.
@@ -97,7 +97,7 @@ DBHost={{ mysql_server_host }}
 # Default:
 # DBName=
 
-DBName={{ db_name }}
+DBName={{ mysql_zbx_db }}
 
 ### Option: DBSchema
 #	Schema name. Used for IBM DB2 and PostgreSQL.
@@ -111,7 +111,7 @@ DBName={{ db_name }}
 #
 # Mandatory: no
 # Default:
-DBUser={{ zabbix_db_user }}
+DBUser={{ mysql_zbx_user }}
 
 ### Option: DBPassword
 #	Database password.
@@ -119,14 +119,14 @@ DBUser={{ zabbix_db_user }}
 #
 # Mandatory: no
 # Default:
-DBPassword={{ zabbix_db_pass }}
+DBPassword={{ mysql_zbx_pass }}
 
 ### Option: DBSocket
 #	Path to MySQL socket.
 #
 # Mandatory: no
 # Default:
-DBSocket={{ db_socket_path }}
+DBSocket={{ mysql_socket }}
 
 ### Option: DBPort
 #	Database port when not using local socket.
@@ -134,7 +134,7 @@ DBSocket={{ db_socket_path }}
 # Mandatory: no
 # Range: 1024-65535
 # Default:
-DBPort={{ db_port }}
+DBPort={{ mysql_port }}
 
 ### Option: HistoryStorageURL
 #	History storage HTTP[S] URL.
