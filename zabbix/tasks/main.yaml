@@ -18,22 +18,31 @@
 - name: Add China mirrors of Centos7 base
   get_url:
     url: http://mirrors.aliyun.com/repo/Centos-7.repo
-    dest: /etc/yum.repos.d/CentOS-7.repo
+    dest: /etc/yum.repos.d/CentOS7.repo
 
 - name: Add China mirrors of epel-release
   get_url:
     url: http://mirrors.aliyun.com/repo/epel-7.repo
     dest: /etc/yum.repos.d/epel.repo
 
+- name: Disable Firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+
+- name: Disable Selinux
+  command: 'setenforce 0'
+
 - name: Start install zabbix
   yum:
     update_cache: yes
+    disable_gpg_check: yes
     pkg:
       - MariaDB-client
       - MariaDB-server
       - MySQL-python
+      - php-fpm
       - nginx
-      - zabbix-nginx-conf
       - zabbix-server-mysql-{{zbx_version}}
       - zabbix-web-mysql-{{zbx_version}}
       - zabbix-web-{{ zbx_version }}
@@ -85,6 +94,29 @@
       login_unix_socket: '{{ mysql_socket }}'
       target: '/tmp/create.sql'
       state: "import"
+
+- name: Init Nginx settings
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'www.conf', dest: '/etc/php-fpm.d/www.conf' }
+    - { src: 'nginx.conf', dest: '/etc/nginx/nginx.conf' }
+
+- name: Restarted Nginx & php-fpm
+  systemd:
+    name: '{{ item }}'
+    state: started
+  with_items:
+    - nginx
+    - php-fpm
+
+- name: Chown directory
+  file:
+    path: '{{ item }}'
+    owner: nginx
+    group: nginx
+  with_items:
+    - '/var/lib/php/session'
+    - '/etc/zabbix/web'
 
 - name: Init zabbix server config
   template:
