@@ -2,4 +2,4 @@
 - hosts: rs-b
   gather_facts: yes
   roles:
-    - zabbix
+    - {role: 'zabbix', when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"}
