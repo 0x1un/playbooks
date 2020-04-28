@@ -1,0 +1,6 @@
+[submodule "ansible-role-mysql"]
+	path = ansible-role-mysql
+	url = https://github.com/geerlingguy/ansible-role-mysql
+[submodule "mariadb"]
+	path = mariadb
+	url = https://github.com/geerlingguy/ansible-role-mysql
