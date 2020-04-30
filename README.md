@@ -10,5 +10,6 @@ ansible playbooks repository
 
 - 2020-04-30 11.14  
   为了每个 role 能够独立分割出去，降低本 playbook 的耦合度，roles 之间不相互依赖！
+  zabbix-proxy 剧本完成，第一个可用版本
 - 2020-04-25 23:25  
   添加了第一个可用的 zabbix playbook，使用 nginx
