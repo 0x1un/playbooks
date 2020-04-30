@@ -1,0 +1,5 @@
+- name: enable zabbix-proxy
+  systemd:
+    name: zabbix-proxy
+    state: started
+    enabled: yes

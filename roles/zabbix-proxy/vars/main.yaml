@@ -1,0 +1,32 @@
+db_type: mysql
+version: 4.4.4
+
+# mysql config
+mysql_port: 3306
+mysql_host: 127.0.0.1
+mysql_super: root
+mysql_super_pass: root
+zabbix_proxy_db_user: zbxproxy
+zabbix_proxy_db_pass: zbxproxy123
+mysql_socket: /var/lib/mysql/mysql.sock
+zabbix_proxy_db_name: zabbixproxy
+
+# zabbix-proxy config vars
+proxy_mode: 0
+server: 127.0.0.1
+server_port: 10051
+hostname: Zabbix proxy
+logfile: /var/log/zabbix/zabbix_proxy.log
+log_file_size: 0
+enable_remote_commands: 0
+log_remote_commands: 0
+pid_file: /var/run/zabbix/zabbix_proxy.pid
+socket_dir: /var/run/zabbix
+proxy_local_buffer: 720
+proxy_offline_buffer: 24
+heartbeat_frequency: 60
+# range: 1-3600*24*7
+config_frequency: 3600
+# range: 1-3600
+data_sender_frequency: 1
+start_pollers: 5

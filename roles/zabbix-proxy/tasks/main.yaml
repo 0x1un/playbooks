@@ -1,4 +1,65 @@
 ---
 
 - name: Add zabbix mirrors of China
+  yum_repository:
+    name: Zabbix-444
+    description: zabbix 4.4.4 mirrors
+    baseurl: https://mirrors.aliyun.com/zabbix/zabbix/4.4/rhel/7/x86_64/
+    gpgkey: https://mirrors.aliyun.com/zabbix/RPM-GPG-KEY-ZABBIX
+    gpgcheck: no
 
+- name: Add China mirrors of Centos7 base
+  get_url:
+    url: http://mirrors.aliyun.com/repo/Centos-7.repo
+    dest: /etc/yum.repos.d/CentOS7.repo
+
+- name: Add China mirrors of epel-release
+  get_url:
+    url: http://mirrors.aliyun.com/repo/epel-7.repo
+    dest: /etc/yum.repos.d/epel.repo
+
+- name: Install zabbix-proxy-{{db_type}}-{{version}}
+  yum:
+    pkg:
+      - 'zabbix-proxy-{{db_type}}-{{version}}'
+    state: present
+
+- name: Install mysql tools
+  yum:
+    pkg:
+      - MySQL-python
+    state: present
+  when: db_type == 'mysql'
+
+- name: Create db user
+  mysql_user:
+    login_user: '{{ mysql_super }}'
+    login_password: '{{ mysql_super_pass }}'
+    login_host: '{{ mysql_host }}'
+    login_port: '{{ mysql_port }}'
+    name: '{{ zabbix_proxy_db_user }}'
+    host: localhost
+    priv: '*.*:ALL'
+    password: '{{ zabbix_proxy_db_pass }}'
+    login_unix_socket: '{{ mysql_socket }}'
+    state: present
+  no_log: True
+  when: db_type == 'mysql'
+
+- name: Import zabbix-proxy schema
+  mysql_db:
+    login_host: '{{ mysql_host }}'
+    login_port: '{{ mysql_port }}'
+    login_user: '{{ zabbix_proxy_db_user }}'
+    login_password: '{{ zabbix_proxy_db_pass }}'
+    login_unix_socket: '{{ mysql_socket }}'
+    state: import
+    name: '{{zabbix_proxy_db_name}}'
+    target: '/usr/share/doc/zabbix-proxy-{{db_type}}-{{version}}/schema.sql.gz'
+
+- name: Copy zabbix-proxy config to server
+  template:
+    src: zabbix_proxy.conf.j2
+    dest: /etc/zabbix/zabbix_proxy.conf
+  notify:
+    - enable zabbix-proxy
