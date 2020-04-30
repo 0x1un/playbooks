@@ -2,4 +2,4 @@
 - hosts: ans-a
   gather_facts: yes
   roles:
-    - {role: 'zabbix'}
+    - {role: 'zabbix-proxy'}
