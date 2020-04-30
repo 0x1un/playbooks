@@ -1,5 +1,4 @@
 ---
-
 - include_tasks: yum-mirrors.yaml
 
 - name: Set timezone to Asia/Shanghai
