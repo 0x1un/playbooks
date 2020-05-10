@@ -1,5 +1,5 @@
 ---
-- hosts: ans-a
+- hosts: ans-a, ans-b
   gather_facts: yes
   roles:
-    - {role: 'zabbix-proxy'}
+    - {role: 'dockerce'}
