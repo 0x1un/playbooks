@@ -1,0 +1,8 @@
+---
+- name: Add kubernetes mirrors of China
+  yum_repository:
+      name: Kubernetes
+      description: k8s mirrors
+      baseurl: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+      gpgkey: https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+      gpgcheck: yes

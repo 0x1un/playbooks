@@ -1,0 +1,14 @@
+---
+- name: Start install docker
+  include_role:
+    name: dockerce
+
+- name: Install k8s component
+  yum:
+    pkg:
+      - kubelet
+      - kubectl
+      - kubeadm
+    state: installed
+  notify:
+    - enable kubelet

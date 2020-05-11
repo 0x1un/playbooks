@@ -1,0 +1,4 @@
+[master]
+172.19.2.120 hostname=k8s-master ansible_user=root
+[node]
+172.19.2.121 hostname=k8s-worker ansible_user=root
