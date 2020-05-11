@@ -1,5 +1,5 @@
 ---
-- hosts: ans-a, ans-b
-  gather_facts: yes
+
+- name: K8s deploy
   roles:
-    - {role: 'dockerce'}
+    - {role: "k8s"}
