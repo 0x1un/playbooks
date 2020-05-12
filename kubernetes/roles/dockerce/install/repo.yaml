@@ -1,0 +1,5 @@
+---
+- name: Add docker repository
+  get_url:
+      url: https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo

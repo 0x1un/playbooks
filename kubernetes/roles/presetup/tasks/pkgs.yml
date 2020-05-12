@@ -1,0 +1,16 @@
+---
+- name: Add kubernetes yum repository
+  yum_repository:
+    name: kubernetes
+    description: Kubernetes Repository
+    baseurl: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+    gpgkey: https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+    gpgcheck: no
+  when: ansible_os_family == "RedHat"
+
+- name: Install kubernetes packages
+  yum:
+    name: "{{ pkgs }}"
+    update_cache: yes
+    state: installed
+  with_items: "{{ pkgs }}"

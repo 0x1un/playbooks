@@ -1,0 +1,9 @@
+service_cidr: "10.100.0.0/12"
+pod_network_cidr: "10.244.0.0/16"
+kube_version: v1.18.2
+token: ""
+master_ip: 172.19.2.120
+kubeadm_opts: ""
+init_opts: ""
+kubeadmin_conf: /etc/kubernetes/admin.conf
+enable_dashboard: no

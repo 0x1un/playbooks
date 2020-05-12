@@ -1,0 +1,26 @@
+---
+- name: Check kubeadm status
+  stat:
+    path: "/etc/kubernetes/pki/ca.key"
+  register: kubeadm_ca
+
+- name: Init cluster if needed
+  include_tasks: init.yml
+  run_once: yes
+  when: not kubeadm_ca.stat.exists
+
+- name: Enable kubelet service
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  register: started_kubelet
+
+- name: Copy config file into Home
+  fetch:
+    src: "{{ kubeadm_config }}"
+    dest: "{{ lookup('env', 'HOME') }}/admin.conf"
+    flat: yes
+  run_once: yes
+  ignore_errors: yes

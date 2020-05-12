@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: dockerce }
+  - { role: presetup, pkgs: ["kubelet", "kubeadm", "kubectl"] }
