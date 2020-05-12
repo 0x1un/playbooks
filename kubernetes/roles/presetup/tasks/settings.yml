@@ -1,0 +1,50 @@
+---
+- name: Renamming hostname
+  hostname:
+    name: '{{ hostname|quote }}'
+
+- name: Add host
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ item }} {{hostvars[item].hostname}}'
+  with_items: '{{groups.all}}'
+
+- name: Disabled firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: yes
+
+- name: Disabled SELinux
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: Remove swap from fstab file
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\s+swap\s+swap\s+.*)$'
+    replace: '# \1'
+
+- name: Disable swap
+  shell: swapoff -a
+
+- name: "[Kernel] Disable swappiness and pass bridged IPv4 traffic to iptable's chains"
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - { name: 'vm.swappiness', value: '0' }
+    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+    - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
+    - { name: 'net.ipv4.ip_forward', value: '1' }
+
+- name: Copy env conf
+  template: src=20-extra-args.conf.j2 dest=/usr/lib/systemd/system/kubelet.service.d/20-extra-args.conf
+
+- name: Reload kubelet
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes

@@ -2,3 +2,6 @@
 
 - name: Install kubernetes packages
   include_tasks: pkgs.yml
+
+- name: Settings
+  include_tasks: settings.yml

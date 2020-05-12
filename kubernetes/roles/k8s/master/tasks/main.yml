@@ -19,7 +19,7 @@
 
 - name: Copy config file into Home
   fetch:
-    src: "{{ kubeadm_config }}"
+    src: "{{ kubeadmin_conf }}"
     dest: "{{ lookup('env', 'HOME') }}/admin.conf"
     flat: yes
   run_once: yes
