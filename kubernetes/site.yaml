@@ -11,8 +11,9 @@
     - { role: dockerce }
     - { role: k8s/master }
     - { role: cni }
-  
-  # tasks:
-  #   - name: test
-  #     debug:
-  #       msg: "{{ master_ip }}"
+
+- hosts: node
+  gather_facts: yes
+  roles:
+    - { role: dockerce }
+    - { role: k8s/node }
