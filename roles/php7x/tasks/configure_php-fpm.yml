@@ -34,20 +34,14 @@
     dest: "{{ php_source_config_path }}/php-fpm.conf"
     remote_src: yes
 
-# - name: Init default configure file
-#   copy:
-#     src: "{{ item.src }}"
-#     dest: "{{ item.dest }}"
-#     remote_src: yes
-#   with_items:
-#     - { src: '{{ php_source_config_path }}/php-fpm.conf.default', dest: '{{ php_source_config_path }}/php-fpm.conf' }
-#     - { src: '{{ php_source_config_path }}/php-fpm.d/www.conf.default', dest: '{{ php_source_config_path }}/php-fpm.d/www.conf' }
 
 - name: Create php-fpm unix sock directory
   file:
     name: /var/run/php-fpm
-    stat: directory
-  when: fpm_unix_sock_dir.stat.exists == Fase
+    recurse: yes
+    state: directory
+
+  when: fpm_unix_sock_dir.stat.exists == false
 
 - name: Copy php-fpm systemd script
   copy:

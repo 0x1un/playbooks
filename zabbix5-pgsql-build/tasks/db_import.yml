@@ -1,0 +1,35 @@
+- name: Create zabbixdb
+  postgresql_db:
+    name: "{{ zbx_db_name }}"
+    state: present
+    encoding: UTF-8
+    
+- name: Create zabbix user 
+  postgresql_user:
+    name: "{{ zbx_db_user }}"
+    db: "{{ zbx_db_name }}"
+    password: "{{ zbx_db_pwd }}"
+    priv: ALL
+    state: present
+
+- name: Change zabbix owner
+  postgresql_owner:
+    db: "{{ zbx_db_name }}"
+    new_owner: "{{ zbx_db_user }}"
+    obj_name: "{{ zbx_db_name }}"
+    obj_type: database
+
+- name: Import data into database
+  shell: >
+    {{ zbx_import_db_schema }}
+  register: zbx_import_output
+
+- name: Debug
+  debug:
+    var:
+      zbx_import_output
+
+- name: Copy zabbix.conf.php
+  template:
+    src: zabbix.conf.php.j2
+    dest: "{{ zbx_front_webui }}/ui/conf/zabbix.conf.php"

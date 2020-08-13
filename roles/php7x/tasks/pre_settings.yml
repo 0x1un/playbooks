@@ -1,5 +1,18 @@
 - name: Remove php5.4 old version
   yum:
     pkg:
-      - php*
+      - php                                  
+      - php-bcmath                            
+      - php-cli                               
+      - php-common                            
+      - php-gd                                
+      - php-ldap                              
+      - php-mbstring                          
+      - php-xml
     state: absent
+  register: remove_php54_output
+
+- name: Debug remove php5.4 old version
+  debug:
+    var:
+      remove_php54_output

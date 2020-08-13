@@ -2,7 +2,8 @@
 # node01 ansible_host=172.19.2.31 ansible_user=root
 # rs-a ansible_host=172.19.2.100 ansible_user=root
 # rs-b ansible_host=172.19.2.101 ansible_user=root
-ans-a ansible_host=172.19.2.120 ansible_user=root
+ans-a ansible_host=10.100.100.120 ansible_user=root
 ans-b ansible_host=172.19.2.121 ansible_user=root
-ans-c ansible_host=172.19.2.199 ansible_user=root
+ans-c ansible_host=10.100.100.122 ansible_user=root
+ans-d ansible_host=10.100.100.123 ansible_user=root
 hefeizabbix ansible_host=172.30.1.39 ansible_user=root

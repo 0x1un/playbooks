@@ -10,10 +10,22 @@ zbx_source_configure_cmd: >
   --with-postgresql=/usr/pgsql-9.6/bin/pg_config
   --with-net-snmp
 
+zbx_import_db_schema: >
+  psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/schema.sql
+
+  psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/images.sql
+
+  psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/data.sql
+
+  psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/double.sql
 
 zabbix_deps:
   - libssh2-devel
   - postgresql-devel
-  - go
 
 timezone: Asia/Shanghai
+
+zbx_db_name: zabbixdb
+zbx_db_user: zabbix
+zbx_db_pwd: zabbixpasswd.
+zbx_server_name: local_zbx_server

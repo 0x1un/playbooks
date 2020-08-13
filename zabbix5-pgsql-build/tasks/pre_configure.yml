@@ -21,8 +21,13 @@
 
 - name: Install deps
   yum:
-    name: "{{ item }}"
+    pkg: "{{ zabbix_deps }}"
     state: present
-  with_items: "{{ zabbix_deps }}"
+
+- name: Install postgresql_db lib
+  yum:
+    pkg:
+      - python2-psycopg2
+    state: present
 
 - include_tasks: nginx_install.yml

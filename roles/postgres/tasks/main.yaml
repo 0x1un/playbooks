@@ -7,13 +7,27 @@
       - postgresql96-server
     state: installed
 
+- name: Check postgresql initdb
+  find:
+    path: /var/lib/pgsql/9.6/data
+  register: check_psql_dir_output
+
 - name: Init database
   command: /usr/pgsql-9.6/bin/postgresql96-setup initdb
   register: output
+  when: check_psql_dir_output.matched <= 0
 
 - name: Print initdb status
   debug:
     msg: '{{ output.stdout }}'
+  when: check_psql_dir_output.matched <= 0
+
+- name: Replace pg_hba.conf
+  template:
+    src: pg_hba.conf.j2
+    dest: /var/lib/pgsql/9.6/data/pg_hba.conf
+    backup: yes
+    force: yes
 
 
 - name: Enable postgresql service

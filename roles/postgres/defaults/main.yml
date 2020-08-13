@@ -1,0 +1,3 @@
+local_method: trust
+hostv4_method: md5
+hostv6_method: md5

@@ -23,13 +23,14 @@
     var:
       zbx_configure_output
 
-# - name: Copy zabbix front web ui
-#   copy:
-#     src: "{{ zbx_source_clone_dir }}/ui"
-#     dest: "{{ zbx_front_webui }}"
-#     owner: nginx
-#     group: nginx
-#     remote_src: yes
+- name: Copy zabbix front web ui
+  copy:
+    src: "{{ zbx_source_clone_dir }}/ui"
+    dest: "{{ zbx_front_webui }}"
+    owner: nginx
+    group: nginx
+    directory_mode: yes
+    remote_src: yes
 
 - name: Configure nginx conf
   template:

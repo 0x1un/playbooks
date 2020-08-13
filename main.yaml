@@ -5,11 +5,10 @@
 #     - {role: "k8s"}
 
 - name: zabbix deploy
-  hosts: ans-c
+  hosts: ans-a
   roles:
-    - {role: 'mirrors'}
     # - {role: 'postgres'}
-    - {role: 'php7x'}
+    # - {role: 'php7x'}
     - {role: 'zabbix5-pgsql-build'}
 
 

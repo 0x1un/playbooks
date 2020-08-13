@@ -10,10 +10,6 @@
 
 
 - name: Downloading php74 source code
-  # get_url:
-  #   url: "https://www.php.net/distributions/php-7.4.9.tar.xz"
-  #   dest: /tmp/php748.tar.xz
-  #   checksum: sha256:4c8b065746ef776d84b7ae47908c21a79e3d4704b86b60d816716b8697c58ce9
   copy:
     src: php-7.4.9.tar.xz
     dest: /tmp/

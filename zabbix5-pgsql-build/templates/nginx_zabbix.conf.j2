@@ -1,7 +1,7 @@
 server {
-    listen       80;
+    listen       8081;
     server_name  _;
-    root {{ zbx_front_webui }};
+    root {{ zbx_front_webui }}/ui;
 
     location / {
         index index.php index.html index.htm;
