@@ -1,4 +1,0 @@
-master_server_ip: 172.19.2.120
-image_repository: registry.cn-hangzhou.aliyuncs.com/google_containers
-pod_ip_range: 10.100.0.0/12
-calico_ipv4pool_ipip: "Always"

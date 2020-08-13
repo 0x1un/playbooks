@@ -1,0 +1,24 @@
+---
+- include: install/repo.yaml
+- name: Install Postgres9.6
+  yum:
+    update_cache: yes
+    pkg:
+      - postgresql96-server
+    state: installed
+
+- name: Init database
+  command: /usr/pgsql-9.6/bin/postgresql96-setup initdb
+  register: output
+
+- name: Print initdb status
+  debug:
+    msg: '{{ output.stdout }}'
+
+
+- name: Enable postgresql service
+  service:
+    name: postgresql-9.6
+    state: restarted
+    enabled: yes
+

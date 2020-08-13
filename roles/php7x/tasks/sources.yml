@@ -1,0 +1,27 @@
+- name: Check source code pack exists
+  stat:
+    path: /tmp/php-7.4.9.tar.xz
+  register: php_compress_file
+
+- name: Check source code directory exists
+  stat:
+    path: /tmp/php-7.4.9
+  register: php_directory
+
+
+- name: Downloading php74 source code
+  # get_url:
+  #   url: "https://www.php.net/distributions/php-7.4.9.tar.xz"
+  #   dest: /tmp/php748.tar.xz
+  #   checksum: sha256:4c8b065746ef776d84b7ae47908c21a79e3d4704b86b60d816716b8697c58ce9
+  copy:
+    src: php-7.4.9.tar.xz
+    dest: /tmp/
+  when: php_compress_file.stat.exists == False or php_directory.stat == False
+
+- name: Unarchive php74 source code
+  unarchive:
+    src: /tmp/php-7.4.9.tar.xz
+    dest: /tmp
+    remote_src: yes
+

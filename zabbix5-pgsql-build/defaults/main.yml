@@ -1,0 +1,19 @@
+zbx_ver: 5.0.2
+zbx_source_clone_dir: "/tmp/zabbix-{{zbx_ver}}"
+zbx_front_webui: /usr/share/zabbix-{{ zbx_ver }}-web
+zbx_source_configure_cmd: >
+  ./configure
+  --enable-server
+  --enable-agent
+  --enable-proxy
+  --with-ssh2
+  --with-postgresql=/usr/pgsql-9.6/bin/pg_config
+  --with-net-snmp
+
+
+zabbix_deps:
+  - libssh2-devel
+  - postgresql-devel
+  - go
+
+timezone: Asia/Shanghai

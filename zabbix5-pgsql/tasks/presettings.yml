@@ -1,0 +1,11 @@
+- name: Timezone => Aisa/Shanghai
+  timezone:
+    name: Asia/Shanghai
+
+- name: Disable Firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+
+- name: Disable Selinux
+  command: 'setenforce 0'

@@ -1,0 +1,5 @@
+- name: Install nginx 116 from rpm
+  yum:
+    name: nginx
+    state: present
+  notify: enable nginx daemon

@@ -1,0 +1,20 @@
+- name: Place php configuration file in place
+  template:
+    src: php.ini.j2
+    dest: "{{ php_source_config_path }}/php.ini"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure php-fpm executable is symlinked into a standard path
+  file:
+    src: "{{ php_source_install_path }}/sbin/php-fpm"
+    dest: "/usr/sbin/php-fpm{{ php_short_version }}"
+    state: link
+  when: "'--enable-fpm' in php_source_configure_command"
+
+- name: Ensure php executable is symlinked into a standard path
+  file:
+    src: "{{ php_source_install_path }}/bin/php"
+    dest: "/usr/bin/php{{ php_short_version }}"
+    state: link

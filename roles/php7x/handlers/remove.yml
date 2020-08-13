@@ -1,0 +1,8 @@
+- name: Remove zabbix deps
+  yum:
+    pkg:
+      - OpenIPMI*
+      - unixODBC
+      - fping
+      - libpqxx
+    state: removed

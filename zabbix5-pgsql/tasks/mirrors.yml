@@ -1,0 +1,26 @@
+- name: Add zabbix 5.0 mirror
+  yum_repository:
+      name: zabbix5
+      description: Zabbix 5.0.x
+      baseurl: https://mirrors.aliyun.com/zabbix/zabbix/5.0/rhel/7/$basearch/
+      gpgkey: https://mirrors.aliyun.com/zabbix/RPM-GPG-KEY-ZABBIX
+      gpgcheck: yes
+
+- name: Add zabbix fronted mirror
+  yum_repository:
+    name: zabbix5-fronted
+    description: Zabbix5 fronted
+    baseurl: https://mirrors.aliyun.com/zabbix/zabbix/5.0/rhel/7/$basearch/frontend/
+    gpgkey: https://mirrors.aliyun.com/zabbix/RPM-GPG-KEY-ZABBIX
+    gpgcheck: yes
+  
+
+- name: Add CentOS 7 base mirror
+  get_url:
+    url: http://mirrors.aliyun.com/repo/Centos-7.repo
+    dest: /etc/yum.repos.d/CentOS7.repo
+
+- name: Add CentOS 7 epel-release mirror
+  get_url:
+    url: http://mirrors.aliyun.com/repo/epel-7.repo
+    dest: /etc/yum.repos.d/epel.repo

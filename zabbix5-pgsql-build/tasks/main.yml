@@ -1,0 +1,2 @@
+- include_tasks: build_from_sources.yml
+- include_tasks: nginx_install.yml

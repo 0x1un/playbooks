@@ -1,0 +1,21 @@
+- name: Check zabbix scripts directory
+  stat:
+    path: "/usr/lib/zabbix/alertscripts"
+  register: zbx_scripts_path
+
+
+- name: Copy dingrobot binary excutable
+  copy:
+    src: dingrobot
+    dest: "/usr/lib/zabbix/alertscripts"
+    mode: 0755
+    group: zabbix
+    owner: zabbix
+  when: zbx_scripts_path.stat.exists == true
+
+- name: Copy dingrobot configure file
+  template:
+    src: zabbix-robot.json.j2
+    dest: "/zabbix-robot.json"
+    owner: zabbix
+    group: zabbix

@@ -1,0 +1,28 @@
+- name: Create zabbix group
+  group:
+    name: zabbix
+    state: present
+
+- name: Create zabbix user
+  user:
+    name: zabbix
+    shell: /sbin/nologin
+    comment: Zabbix Monitoring System
+    group: zabbix
+    state: present
+
+- name: Create /usr/lib/zabbix directory
+  file:
+    path: /usr/lib/zabbix
+    mode: u=rwx,g=rwx,o=
+    owner: zabbix
+    group: zabbix
+    state: directory
+
+- name: Install deps
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ zabbix_deps }}"
+
+- include_tasks: nginx_install.yml

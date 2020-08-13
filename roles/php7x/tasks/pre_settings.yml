@@ -1,0 +1,5 @@
+- name: Remove php5.4 old version
+  yum:
+    pkg:
+      - php*
+    state: absent

@@ -1,0 +1,38 @@
+- include_tasks: pre_configure.yml
+
+- name: Upload zabbix source code
+  copy:
+    src: zabbix-5.0.2.tar.gz
+    dest: /tmp
+
+- name: Unarchive zabbix source code
+  unarchive:
+    src: /tmp/zabbix-5.0.2.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Run ./configure
+  shell: >
+    chdir={{ zbx_source_clone_dir }}
+    {{ zbx_source_configure_cmd }}
+    make -j8 && make install
+  register: zbx_configure_output
+
+- name: Print configure output
+  debug:
+    var:
+      zbx_configure_output
+
+# - name: Copy zabbix front web ui
+#   copy:
+#     src: "{{ zbx_source_clone_dir }}/ui"
+#     dest: "{{ zbx_front_webui }}"
+#     owner: nginx
+#     group: nginx
+#     remote_src: yes
+
+- name: Configure nginx conf
+  template:
+    src: nginx_zabbix.conf.j2
+    dest: /etc/nginx/conf.d/zabbix.conf
+  notify: reload nginx daemon

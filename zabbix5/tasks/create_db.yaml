@@ -1,0 +1,48 @@
+---
+
+- name: Enable MariaDB
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Create zabbix database
+  mysql_db:
+      name: zabbix
+      login_port: '{{ mysql_port }}'
+      login_host: '{{ mysql_host }}'
+      login_user: '{{ mysql_super }}'
+      login_password: '{{ mysql_super_pass }}'
+      login_unix_socket: '{{ mysql_socket }}'
+      encoding: 'utf8'
+      state: present
+
+- name: Create zabbix user
+  mysql_user:
+    login_user: '{{ mysql_super }}'
+    login_password: '{{ mysql_super_pass }}'
+    login_host: '{{ mysql_host }}'
+    login_port: '{{ mysql_port }}'
+    name: '{{ mysql_zbx_user }}'
+    host: localhost
+    priv: '*.*:ALL'
+    password: '{{ mysql_zbx_pass }}'
+    login_unix_socket: '{{ mysql_socket }}'
+    state: present
+  no_log: True
+
+- name: Copy create.sql to remote host
+  copy:
+    src: create.sql
+    dest: /tmp/create.sql
+
+- name: Import zabbix schema
+  mysql_db:
+      name: zabbix
+      login_host: '{{ mysql_host }}'
+      login_user: '{{ mysql_super }}'
+      login_port: '{{ mysql_port }}'
+      login_password: '{{ mysql_super_pass }}'
+      login_unix_socket: '{{ mysql_socket }}'
+      target: '/tmp/create.sql'
+      state: "import"

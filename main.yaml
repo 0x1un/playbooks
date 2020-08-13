@@ -1,5 +1,19 @@
 ---
 
-- name: K8s deploy
+# - name: K8s deploy
+#   roles:
+#     - {role: "k8s"}
+
+- name: zabbix deploy
+  hosts: ans-c
   roles:
-    - {role: "k8s"}
+    - {role: 'mirrors'}
+    # - {role: 'postgres'}
+    - {role: 'php7x'}
+    - {role: 'zabbix5-pgsql-build'}
+
+
+  # hosts: hefeizabbix
+  # gather_facts: no
+  # roles:
+  #   - { role: zabbix-dingtalk-robot }

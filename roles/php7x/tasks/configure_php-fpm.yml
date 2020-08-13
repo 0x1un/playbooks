@@ -1,0 +1,58 @@
+- name: Check php-fpm directory
+  stat:
+    path: "{{php_fpm_pool_conf_path }}"
+  register: fpm_pool_path
+
+- name: Check unix sock php-fpm directory
+  stat:
+    path: /var/run/php-fpm
+  register: fpm_unix_sock_dir
+
+
+- name: Create php-fpm config directory
+  file:
+    path: "{{ php_fpm_pool_conf_path }}"
+    state: directory
+    mode: 0755
+    group: root
+    owner: root
+  when: fpm_pool_path.stat.exists == false
+
+- name: Ensure the default pool exists.
+  template:
+    src: www.conf.j2
+    dest: "{{ php_source_config_path }}/php-fpm.d/www.conf"
+    owner: root
+    group: root
+    mode: 0644
+    force: false
+  when: "'--enable-fpm' in php_source_configure_command"
+
+- name: Init php-fpm.conf
+  copy:
+    src: "{{ php_source_config_path }}/php-fpm.conf.default"
+    dest: "{{ php_source_config_path }}/php-fpm.conf"
+    remote_src: yes
+
+# - name: Init default configure file
+#   copy:
+#     src: "{{ item.src }}"
+#     dest: "{{ item.dest }}"
+#     remote_src: yes
+#   with_items:
+#     - { src: '{{ php_source_config_path }}/php-fpm.conf.default', dest: '{{ php_source_config_path }}/php-fpm.conf' }
+#     - { src: '{{ php_source_config_path }}/php-fpm.d/www.conf.default', dest: '{{ php_source_config_path }}/php-fpm.d/www.conf' }
+
+- name: Create php-fpm unix sock directory
+  file:
+    name: /var/run/php-fpm
+    stat: directory
+  when: fpm_unix_sock_dir.stat.exists == Fase
+
+- name: Copy php-fpm systemd script
+  copy:
+    src: "{{ php_source_clone_dir }}/sapi/fpm/php-fpm.service"
+    dest: "/usr/lib/systemd/system/"
+    remote_src: yes
+  notify:
+    - enable php-fpm

@@ -1,0 +1,19 @@
+- name: Install zabbix
+  yum:
+    update_cache: yes
+    disable_gpg_check: yes
+    pkg:
+      - zabbix-release
+      - "@Development tools"
+      - zabbix-server-pgsql
+      - zabbix-agent
+      - zabbix-web-pgsql-scl
+      - nginx
+      - php-fpm
+      - centos-release-scl
+    state: present
+  notify: 
+    - Init Nginx
+    - Chown directory owner
+    - Enable zabbix-server
+    - Enable nginx

@@ -1,0 +1,34 @@
+- name: Create www group
+  group:
+    name: www
+    state: present
+
+- name: Create www user
+  user:
+    name: www
+    group: www
+    state: present
+
+- name: Build configure script.
+  run_once: true
+  command: >
+    chdir={{ php_source_clone_dir }}
+    ./buildconf --force
+
+- name: Run configure script.
+  run_once: true
+  shell: >
+    chdir={{ php_source_clone_dir }}
+    {{ php_source_configure_command }}
+
+- name: Make and install PHP.
+  run_once: true
+  command: >
+    {{ item }}
+    chdir={{ php_source_clone_dir }}
+  with_items:
+    - "{{ php_source_make_command }}"
+    - make install
+
+- include_tasks: configure_base.yml
+- include_tasks: configure_php-fpm.yml

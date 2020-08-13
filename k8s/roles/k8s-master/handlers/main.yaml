@@ -1,6 +1,0 @@
----
-- name: enable kubelet
-  systemd:
-    name: kubelet
-    state: started
-    enabled: yes
