@@ -1,14 +1,27 @@
+- name: Ensure .pkg_installed exists
+  stat:
+    path: /tmp/.pkg_installed
+  register: pkg_installed
+
+- name: Copy oniguruma package
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: oniguruma-6.8.2-1.el7.x86_64.rpm, dest: /tmp/oniguruma-6.8.2-1.el7.x86_64.rpm }
+    - { src: oniguruma-devel-6.8.2-1.el7.x86_64.rpm, dest: /tmp/oniguruma-devel-6.8.2-1.el7.x86_64.rpm }
+  
+- name: Install oniguruma
+  yum:
+    name:  ['/tmp/oniguruma-6.8.2-1.el7.x86_64.rpm', '/tmp/oniguruma-devel-6.8.2-1.el7.x86_64.rpm']
+    state: present
+
+
 - name: Install base deps
   yum:
     update_cache: yes
+    disable_gpg_check: yes
     pkg:
-      - php
-      - php-gd
-      - php-ldap
-      - php-json
-      - php-bcmath
-      - php-mbstring
-      - php-xml
       - libevent-devel
       - pcre-devel
       - gcc
@@ -23,26 +36,29 @@
       - systemd-devel
       - cmake3
     state: present
+  when: pkg_installed.stat.exists == False
 
-- name: Install zabbix deps
-  yum:
-    update_cache: yes
-    disable_gpg_check: yes
-    pkg:
-      - OpenIPMI
-      - OpenIPMI-libs
-      - OpenIPMI-modalias
-      - unixODBC
-      - fping
-      - libpqxx
-    state: present
+# - name: Install zabbix deps
+#   yum:
+#     update_cache: yes
+#     disable_gpg_check: yes
+#     pkg:
+#       - OpenIPMI
+#       - OpenIPMI-libs
+#       - OpenIPMI-devel
+#       - OpenIPMI-modalias
+#       - unixODBC
+#       - fping
+#     state: present
+#   when: pkg_installed.stat.exists == False
 
 - name: Install php72 deps
   yum:
     update_cache: yes
+    disable_gpg_check: yes
     pkg:
+      - libpqxx
       - libpqxx-devel
-      - wget
       - vim
       - pcre
       - libwebp-devel
@@ -50,8 +66,6 @@
       - openssl
       - openssl-devel
       - libicu-devel
-      - gcc
-      - gcc-c++
       - autoconf
       - libjpeg
       - libjpeg-devel
@@ -69,7 +83,6 @@
       - glib2-devel
       - ncurses
       - ncurses-devel
-      - curl
       - curl-devel
       - krb5-devel
       - libidn
@@ -124,3 +137,10 @@
       - libicu-devel
       - mariadb-devel
       - gmp-devel
+  when: pkg_installed.stat.exists == False
+
+
+- name: Create .pkg_installed dot file
+  file:
+    path: /tmp/.pkg_installed
+    state: touch

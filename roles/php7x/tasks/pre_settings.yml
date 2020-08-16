@@ -16,3 +16,10 @@
   debug:
     var:
       remove_php54_output
+
+- name: Install nginx 116 from rpm
+  yum:
+    disable_gpg_check: yes
+    name: nginx
+    state: present
+  notify: enable nginx daemon

@@ -15,11 +15,22 @@
     chdir={{ php_source_clone_dir }}
     ./buildconf --force
 
+- name: Ensure Makefile is exists
+  stat:
+    path: "{{ php_source_clone_dir }}/Makefile"
+  register: ensure_php_makefile_output
+
 - name: Run configure script.
   run_once: true
   shell: >
     chdir={{ php_source_clone_dir }}
     {{ php_source_configure_command }}
+  when: ensure_php_makefile_output.stat.exists == False
+
+- name: Ensure php executable
+  stat:
+    path: "{{ php_source_clone_dir }}/sapi/cli/php"
+  register: ensure_php_bin_output
 
 - name: Make and install PHP.
   run_once: true
@@ -29,6 +40,7 @@
   with_items:
     - "{{ php_source_make_command }}"
     - make install
+  when: ensure_php_bin_output.stat.exists == False
 
 - include_tasks: configure_base.yml
 - include_tasks: configure_php-fpm.yml

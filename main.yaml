@@ -7,8 +7,10 @@
 - name: zabbix deploy
   hosts: ans-a
   roles:
-    # - {role: 'postgres'}
-    # - {role: 'php7x'}
+    # - { role: 'pre_clean' }
+    # - { role: 'test' }
+    - {role: 'postgres'}
+    - {role: 'php7x'}
     - {role: 'zabbix5-pgsql-build'}
 
 

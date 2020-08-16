@@ -1,14 +1,20 @@
 zbx_ver: 5.0.2
+zbx_install_prefix: /opt/zabbix-{{ zbx_ver }}
 zbx_source_clone_dir: "/tmp/zabbix-{{zbx_ver}}"
 zbx_front_webui: /usr/share/zabbix-{{ zbx_ver }}-web
 zbx_source_configure_cmd: >
   ./configure
+  --prefix={{ zbx_install_prefix }}
   --enable-server
   --enable-agent
   --enable-proxy
+  --with-ldap
   --with-ssh2
   --with-postgresql=/usr/pgsql-9.6/bin/pg_config
   --with-net-snmp
+  --with-openipmi
+  --with-unixodbc
+
 
 zbx_import_db_schema: >
   psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/schema.sql
@@ -19,9 +25,6 @@ zbx_import_db_schema: >
 
   psql -d zabbixdb -U zabbix {{ "<" }} {{ zbx_source_clone_dir }}/database/postgresql/double.sql
 
-zabbix_deps:
-  - libssh2-devel
-  - postgresql-devel
 
 timezone: Asia/Shanghai
 

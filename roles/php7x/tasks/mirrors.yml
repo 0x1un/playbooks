@@ -1,9 +1,16 @@
-- name: Add CentOS 7 base mirror
-  get_url:
-    url: http://mirrors.aliyun.com/repo/Centos-7.repo
-    dest: /etc/yum.repos.d/CentOS7.repo
+- name: Create mirror of China
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: Centos7-ustsc.repo.j2, dest: /etc/yum.repos.d/Centos7-ustsc-base.repo }
+    - { src: Centos7-epel.repo.j2, dest: /etc/yum.repos.d/Centos7-epel.repo }
+  
+# - name: Replace epel url
+  # shell: sed -e 's|^metalink=|#metalink=|g' -e 's|^#baseurl=https\?://download.fedoraproject.org/pub/epel/|baseurl=https://mirrors.ustc.edu.cn/epel/|g' -i.bak /etc/yum.repos.d/epel.repo
+  
+  register: replace_epel_url_output
 
-- name: Add CentOS 7 epel-release mirror
-  get_url:
-    url: http://mirrors.aliyun.com/repo/epel-7.repo
-    dest: /etc/yum.repos.d/epel.repo
+- name: Debug
+  debug:
+    msg: "{{ replace_epel_url_output }}"

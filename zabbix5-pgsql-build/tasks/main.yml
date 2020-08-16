@@ -1,3 +1,30 @@
 - include_tasks: build_from_sources.yml
 - include_tasks: nginx_install.yml
 - include_tasks: db_import.yml
+
+- name: Create zabbix component service file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: zabbix-server.service.j2, dest: /usr/lib/systemd/system/zabbix-server.service }
+    - { src: zabbix-agent.service.j2, dest: /usr/lib/systemd/system/zabbix-agent.service }
+
+- name: Copy zabbix conf
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    force: yes
+  with_items:
+      - { src: zabbix_server.conf.j2, dest: '{{ zbx_install_prefix }}/etc/zabbix_server.conf' }
+
+
+- name: Enabled zabbix daemon
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  with_items:
+    - zabbix-server
+    - zabbix-agent

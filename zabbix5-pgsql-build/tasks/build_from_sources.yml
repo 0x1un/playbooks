@@ -11,17 +11,17 @@
     dest: /tmp
     remote_src: yes
 
+- name: Ensure Makefile is exists
+  stat:
+    path: "{{ zbx_source_clone_dir }}/Makefile"
+  register: ensure_zbx_makefile_output
+
 - name: Run ./configure
   shell: >
     chdir={{ zbx_source_clone_dir }}
     {{ zbx_source_configure_cmd }}
     make -j8 && make install
-  register: zbx_configure_output
-
-- name: Print configure output
-  debug:
-    var:
-      zbx_configure_output
+  when: not ensure_zbx_makefile_output.stat.exists
 
 - name: Copy zabbix front web ui
   copy:
@@ -36,4 +36,9 @@
   template:
     src: nginx_zabbix.conf.j2
     dest: /etc/nginx/conf.d/zabbix.conf
-  notify: reload nginx daemon
+
+- name: Enable nginx daemon
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes

@@ -22,12 +22,6 @@
 - name: Import data into database
   shell: >
     {{ zbx_import_db_schema }}
-  register: zbx_import_output
-
-- name: Debug
-  debug:
-    var:
-      zbx_import_output
 
 - name: Copy zabbix.conf.php
   template:

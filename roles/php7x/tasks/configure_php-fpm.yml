@@ -43,10 +43,21 @@
 
   when: fpm_unix_sock_dir.stat.exists == false
 
+- name: Ensure php-fpm.service exists
+  stat:
+    path: "{{ php_source_clone_dir }}/sapi/fpm/php-fpm.service"
+  register: fpm_ensure
+
+
 - name: Copy php-fpm systemd script
   copy:
     src: "{{ php_source_clone_dir }}/sapi/fpm/php-fpm.service"
     dest: "/usr/lib/systemd/system/"
     remote_src: yes
-  notify:
-    - enable php-fpm
+  when: fpm_ensure.stat.exists == True
+
+- name: Enable php-fpm daemon
+  systemd:
+    name: php-fpm
+    state: started
+    enabled: yes
