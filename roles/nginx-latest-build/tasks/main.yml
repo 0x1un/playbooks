@@ -1,0 +1,32 @@
+- include_tasks: pre_settings.yml
+- include_tasks: copy_source_code.yml
+- include_tasks: build_or_configure.yml
+
+- name: Ensure conf.d stat
+  stat:
+    path: "{{ nginx_confd_path }}"
+  register: nginx_confd_stat
+
+- name: Create conf.d directory
+  file:
+    path: "{{ nginx_confd_path }}"
+    state: directory
+  when: not nginx_confd_stat.stat.exists
+
+- name: Replace default nginx.conf | force
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_conf_path }}"
+    force: yes
+
+- name: Create nginx systemd scripts
+  template:
+    src: nginx.service.j2
+    dest: /usr/lib/systemd/system/nginx118.service
+
+- name: Load nginx118.service
+  systemd:
+    name: nginx118
+    state: started
+    enabled: yes
+    daemon_reload: yes

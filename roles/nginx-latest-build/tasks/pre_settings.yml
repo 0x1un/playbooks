@@ -1,0 +1,11 @@
+- name: Create group => nginx
+  group:
+    name: "{{ nginx_user }}"
+    state: present
+
+- name: Create user => nginx
+  user:
+    name: "{{ nginx_user }}"
+    shell: /sbin/nologin
+    group: "{{ nginx_user }}"
+    state: present

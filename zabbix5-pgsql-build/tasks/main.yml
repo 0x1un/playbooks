@@ -1,5 +1,5 @@
+- include_tasks: pre_configure.yml
 - include_tasks: build_from_sources.yml
-- include_tasks: nginx_install.yml
 - include_tasks: db_import.yml
 
 - name: Create zabbix component service file

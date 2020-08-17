@@ -38,19 +38,6 @@
     state: present
   when: pkg_installed.stat.exists == False
 
-# - name: Install zabbix deps
-#   yum:
-#     update_cache: yes
-#     disable_gpg_check: yes
-#     pkg:
-#       - OpenIPMI
-#       - OpenIPMI-libs
-#       - OpenIPMI-devel
-#       - OpenIPMI-modalias
-#       - unixODBC
-#       - fping
-#     state: present
-#   when: pkg_installed.stat.exists == False
 
 - name: Install php72 deps
   yum:

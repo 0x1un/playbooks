@@ -10,7 +10,3 @@
   # shell: sed -e 's|^metalink=|#metalink=|g' -e 's|^#baseurl=https\?://download.fedoraproject.org/pub/epel/|baseurl=https://mirrors.ustc.edu.cn/epel/|g' -i.bak /etc/yum.repos.d/epel.repo
   
   register: replace_epel_url_output
-
-- name: Debug
-  debug:
-    msg: "{{ replace_epel_url_output }}"

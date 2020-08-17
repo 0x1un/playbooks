@@ -1,5 +1,3 @@
-- include_tasks: pre_configure.yml
-
 - name: Upload zabbix source code
   copy:
     src: zabbix-5.0.2.tar.gz
@@ -35,10 +33,10 @@
 - name: Configure nginx conf
   template:
     src: nginx_zabbix.conf.j2
-    dest: /etc/nginx/conf.d/zabbix.conf
+    dest: /opt/nginx118/etc/conf.d/zabbix.conf
 
 - name: Enable nginx daemon
   systemd:
-    name: nginx
+    name: nginx118
     state: restarted
     enabled: yes

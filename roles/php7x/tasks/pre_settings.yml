@@ -1,3 +1,14 @@
+- name: Ensure nginx in /opt/nginx118
+  stat:
+    path: /opt/nginx118
+  register: nginx118_stat
+
+- name: Import nginx-latest-build role | Starting install nginx from source
+  import_role:
+    name: nginx-latest-build
+  when: not nginx118_stat.stat.exists
+
+
 - name: Remove php5.4 old version
   yum:
     pkg:
@@ -17,9 +28,3 @@
     var:
       remove_php54_output
 
-- name: Install nginx 116 from rpm
-  yum:
-    disable_gpg_check: yes
-    name: nginx
-    state: present
-  notify: enable nginx daemon

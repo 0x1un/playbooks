@@ -1,0 +1,37 @@
+# - name: Ensure the local source code stat
+#   local_action: 
+#     module: stat
+#     path: "{{ role_path }}/files/{{ item }}"
+#   with_items:
+#     - "nginx-1.18.0.tar.gz"
+#     - "pcre-8.44.tar.gz"
+#     - "zlib-1.2.11.tar.gz"
+#   register: local_source_code_stat
+
+- name: Ensure the dest source code stat
+  stat:
+    path: "{{ item }}"
+  with_items:
+    - /tmp/nginx-1.18.0.tar.gz
+    - /tmp/pcre-8.44.tar.gz
+    - /tmp/zlib-1.2.11.tar.gz
+  register: dest_source_code_stat
+
+- name: Copy Nginx source code and dependences
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: nginx-1.18.0.tar.gz, dest: /tmp/nginx-1.18.0.tar.gz }
+    - { src: pcre-8.44.tar.gz, dest: /tmp/pcre-8.44.tar.gz }
+    - { src: zlib-1.2.11.tar.gz, dest: /tmp/zlib-1.2.11.tar.gz }
+
+- name: Unarchive the source code packet
+  unarchive:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { src: /tmp/nginx-1.18.0.tar.gz, dest: /tmp }
+    - { src: /tmp/pcre-8.44.tar.gz, dest: /tmp }
+    - { src: /tmp/zlib-1.2.11.tar.gz, dest: /tmp }

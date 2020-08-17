@@ -1,0 +1,14 @@
+- name: Configure | building dependences source code
+  shell: >
+    chdir={{ item }}
+    {{ normal_configure_command }}
+    make -j8 && make install
+  with_items:
+    - "{{ nginx_dep_pcre_path }}"
+    - "{{ nginx_dep_zlib_path }}"
+
+- name: Configure | building nginx source code
+  shell: >
+    chdir={{ nginx_source_directory_path }}
+    {{ nginx_configure_command }}
+    make -j8 && make install

@@ -87,5 +87,3 @@
   file:
     path: /tmp/.zbx_deps_installed
     state: touch
-
-- include_tasks: nginx_install.yml

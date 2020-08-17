@@ -1,0 +1,29 @@
+nginx_user: nginx
+nginx_install_prefix: /opt/nginx118
+nginx_install_sbin_path: "{{ nginx_install_prefix }}"
+nginx_conf_path: "{{ nginx_install_prefix }}/etc/nginx.conf"
+nginx_pid_path: /var/run/nginx118/nginx.pid
+
+nginx_confd_path: "{{ nginx_install_prefix }}/etc/conf.d"
+
+nginx_source_directory_path: /tmp/nginx-1.18.0
+
+nginx_dep_pcre_path: /tmp/pcre-8.44
+nginx_dep_zlib_path: /tmp/zlib-1.2.11
+
+
+nginx_configure_command: >
+  ./configure 
+  --prefix={{ nginx_install_prefix }}
+  --sbin-path={{ nginx_install_sbin_path }}
+  --conf-path={{ nginx_conf_path }}
+  --pid-path={{ nginx_pid_path }}
+  --with-pcre={{ nginx_dep_pcre_path }}
+  --with-zlib={{ nginx_dep_zlib_path }}
+  --with-http_ssl_module
+  --with-stream
+  --with-mail=dynamic
+
+normal_configure_command: >
+  ./configure
+
