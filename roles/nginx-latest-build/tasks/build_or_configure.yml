@@ -7,8 +7,14 @@
     - "{{ nginx_dep_pcre_path }}"
     - "{{ nginx_dep_zlib_path }}"
 
+- name: Ensure nginx installed
+  stat:
+    path: "{{ nginx_install_prefix }}"
+  register: nginx_installed_stat
+
 - name: Configure | building nginx source code
   shell: >
     chdir={{ nginx_source_directory_path }}
     {{ nginx_configure_command }}
     make -j8 && make install
+  when: not nginx_installed_stat.stat.exists

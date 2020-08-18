@@ -27,7 +27,7 @@
   firewalld:
     zone: public
     permanent: yes
-    port: 8080/tcp
+    port: "{{ zbx_web_port }}/tcp"
     state: enabled
   when: pids_of_firewalld.pids | length != 0
 

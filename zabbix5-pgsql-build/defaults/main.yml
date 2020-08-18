@@ -1,3 +1,4 @@
+zbx_web_port: 8096
 zbx_ver: 5.0.2
 zbx_install_prefix: /opt/zabbix-{{ zbx_ver }}
 zbx_source_clone_dir: "/tmp/zabbix-{{zbx_ver}}"

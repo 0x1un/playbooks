@@ -5,7 +5,7 @@
 #     - {role: "k8s"}
 
 - name: zabbix deploy
-  hosts: ans-c
+  hosts: public_zbx
   gather_facts: no
   roles:
     # - { role: 'pre_clean' }

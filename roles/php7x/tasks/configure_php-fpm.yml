@@ -40,6 +40,8 @@
     name: /var/run/php-fpm
     recurse: yes
     state: directory
+    owner: "{{ php_fpm_pool_user }}"
+    group: "{{ php_fpm_pool_group }}"
 
   when: fpm_unix_sock_dir.stat.exists == false
 
@@ -60,4 +62,5 @@
   systemd:
     name: php-fpm
     state: started
+    daemon_reload: yes
     enabled: yes

@@ -12,8 +12,6 @@ KillMode=control-group
 ExecStart={{ zbx_install_prefix }}/sbin/zabbix_agentd -c $CONFFILE
 ExecStop=/bin/kill -SIGTERM $MAINPID
 RestartSec=10s
-User=zabbix
-Group=zabbix
 
 [Install]
 WantedBy=multi-user.target

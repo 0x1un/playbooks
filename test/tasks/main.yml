@@ -1,8 +1,0 @@
-- name: Replace ustsc mirror with base mirror
-  pids:
-    name: firewalld
-  register: pids_of_firewalld
-
-- name: Debug
-  debug:
-    msg: "PIDS of python: {{ pids_of_firewalld.pids | length }}"
