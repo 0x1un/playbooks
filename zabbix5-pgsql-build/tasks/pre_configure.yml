@@ -72,6 +72,7 @@
       - unixODBC
       - unixODBC-devel
       - fping
+      - libcurl-devel
     state: present
   when: not ensure_zbx_deps_installed.stat.exists
 

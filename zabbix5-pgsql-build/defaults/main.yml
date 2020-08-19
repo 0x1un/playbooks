@@ -15,6 +15,7 @@ zbx_source_configure_cmd: >
   --with-net-snmp
   --with-openipmi
   --with-unixodbc
+  --with-libcurl
 
 
 zbx_import_db_schema: >
