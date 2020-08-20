@@ -1,4 +1,5 @@
 zbx_web_port: 8096
+zbx_server_post: 10058
 zbx_ver: 5.0.2
 zbx_install_prefix: /opt/zabbix-{{ zbx_ver }}
 zbx_source_clone_dir: "/tmp/zabbix-{{zbx_ver}}"
@@ -16,6 +17,7 @@ zbx_source_configure_cmd: >
   --with-openipmi
   --with-unixodbc
   --with-libcurl
+  --with-libxml2
 
 
 zbx_import_db_schema: >

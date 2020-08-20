@@ -5,15 +5,10 @@ After=network.target
 After=postgresql-9.6.service
 
 [Service]
-Environment="CONFFILE={{ zbx_install_prefix }}/etc/zabbix_server.conf"
-EnvironmentFile=-/etc/sysconfig/zabbix-server
 Type=forking
 Restart=on-failure
-KillMode=control-group
-ExecStart={{ zbx_install_prefix }}/sbin/zabbix_server -c $CONFFILE
-ExecStop=/bin/kill -SIGTERM $MAINPID
+ExecStart={{ zbx_install_prefix }}/sbin/zabbix_server -c {{ zbx_install_prefix }}/etc/zabbix_server.conf
 RestartSec=10s
-TimeoutSec=0
 
 [Install]
 WantedBy=multi-user.target
