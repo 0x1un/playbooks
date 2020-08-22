@@ -24,6 +24,12 @@
     src: nginx.service.j2
     dest: /usr/lib/systemd/system/nginx118.service
 
+- name: Ensure the nginx root permission
+  file:
+    path: "{{ nginx_install_prefix }}"
+    owner: nginx
+    group: nginx
+
 - name: Load nginx118.service
   systemd:
     name: nginx118
