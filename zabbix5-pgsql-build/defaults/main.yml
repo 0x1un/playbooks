@@ -36,3 +36,6 @@ zbx_db_name: zabbixdb
 zbx_db_user: zabbix
 zbx_db_pwd: zabbixpasswd.
 zbx_server_name: local_zbx_server
+
+# zabbix server settings
+zbx_cache_size: 128M
