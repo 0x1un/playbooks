@@ -30,6 +30,14 @@
     directory_mode: yes
     remote_src: yes
 
+- name: Place Chinese font simkai.ttf
+  copy:
+    src: simkai.ttf
+    dest: "{{ zbx_front_webui }}/ui/assets/fonts/DejaVuSans.ttf"
+    force: yes
+    owner: nginx
+    group: nginx
+
 - name: Configure nginx conf
   template:
     src: nginx_zabbix.conf.j2
