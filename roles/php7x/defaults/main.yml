@@ -2,6 +2,9 @@ php_version: "7.4.9"
 php_short_version: "74"
 php_fpm_daemon: php-fpm
 
+php_fpm_pool_user: nginx
+php_fpm_pool_group: nginx
+
 php_source_install_path: /opt/php
 php_source_config_path: /opt/php/etc
 php_fpm_conf_path: "{{ php_source_config_path }}"
@@ -12,11 +15,8 @@ php_source_configure_command: >
   --prefix={{ php_source_install_path }}
   --with-config-file-path={{ php_source_config_path }}
   --enable-fpm
-  --with-fpm-user=www
-  --with-fpm-group=www
-  --enable-mysqlnd
-  --with-mysqli=mysqlnd
-  --with-pdo-mysql=mysqlnd
+  --with-fpm-user={{ php_fpm_pool_user }}
+  --with-fpm-group={{ php_fpm_pool_group }}
   --with-pdo-pgsql=/usr/pgsql-9.6/
   --with-pgsql=/usr/pgsql-9.6/
   --enable-mysqlnd-compression-support
@@ -33,7 +33,6 @@ php_source_configure_command: >
   --enable-mbstring
   --enable-intl
   --enable-ftp
-  --enable-gd-jis-conv
   --with-openssl
   --with-mhash
   --enable-pcntl
@@ -56,6 +55,7 @@ php_source_configure_command: >
   --with-libdir=lib64
   --with-ldap-sasl
 
+# --enable-gd-jis-conv
 
 # If this is set to false, none of the following options will have any effect.
 # Any and all changes to /etc/php.ini will be your responsibility.
@@ -122,7 +122,5 @@ php_fpm_pm_start_servers: 5
 php_fpm_pm_min_spare_servers: 5
 php_fpm_pm_max_spare_servers: 5
 
-php_fpm_pool_user: nginx
-php_fpm_pool_group: nginx
 
 php_fpm_pool_conf_path: "/etc/php/{{ php_version }}/php-fpm.d"
